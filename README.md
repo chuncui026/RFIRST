@@ -521,6 +521,112 @@ This project is for learning and research purposes only, without any express or 
 
 **Last Updated**: March 2026
 
+# TRS File Generation and Processing Tool
+
+## Overview
+
+This tool is designed to process IQ data files and parameter files to generate TRS (Trace Set) files, merge multiple TRS files, and create average traces for side-channel analysis. It supports various signal types and provides a user-friendly interface for selecting different operation modes.
+
+## Features
+
+- **Generate TRS files from IQ data**: Convert raw IQ data (.npy files) and parameter files (.txt) into TRS files
+- **Signal type selection**: Choose between In-phase (I), Quadrature (Q), or Amplitude signals
+- **Parameter file processing**: Extract parameters (Plaintext, Key, Ciphertext) from text files and embed them into TRS files
+- **Merge TRS files**: Combine multiple TRS files into a single merged file
+- **Average trace generation**: Create average traces from multiple TRS files to improve signal-to-noise ratio
+
+## Dependencies
+
+- Python 3.x
+- NumPy
+- trsfile
+- tqdm
+- matplotlib
+- csv\_to\_trs (custom module)
+- trs\_loader (custom module)
+
+## Usage
+
+### Running the Tool
+
+Execute the script to start the interactive interface:
+
+```bash
+python getfinaltrs_zh.py
+```
+
+### Operation Modes
+
+1. **Generate TRS from IQ data and parameter files**
+   - Select signal type (I, Q, or Amplitude)
+   - Processes .npy IQ files and .txt parameter files to create TRS files
+2. **Fill existing TRS files with parameters**
+   - Reads existing TRS files and embeds parameters from .txt files
+3. **Merge multiple TRS files**
+   - Validates TRS files based on parameter length requirements
+   - Merges valid files into a single TRS file
+   - Optionally generates an average trace file
+4. **Execute all operations**
+   - Runs all modes sequentially
+
+### Input File Requirements
+
+#### Parameter Files (.txt)
+
+Parameter files should contain the following information:
+
+```
+session_id = YYYYMMDD_HHMMSS
+save_counter = 000000
+plaintext = <hex_string>
+key = <hex_string>
+ciphertext = <hex_string>
+```
+
+#### IQ Files (.npy)
+
+IQ files should be complex numpy arrays stored in .npy format. The expected naming convention is:
+
+```
+{session_id}_{counter:06d}_iq.npy
+```
+
+### Output
+
+- **TRS files from IQ data**: Saved in subdirectories based on signal type (`trs_from_iq_amplitude`, `trs_from_iq_I`, `trs_from_iq_Q`)
+- **TRS files with parameters**: Saved in the `with_params` directory
+- **Merged TRS files**: Saved in the `merged` directory
+- **Average trace files**: Saved in the `merged` directory with `average_` prefix
+
+## Example Workflow
+
+1. **Prepare input files**:
+   - Place IQ files (.npy) and parameter files (.txt) in the same directory
+2. **Run the tool**:
+   - Select mode 1 to generate TRS files from IQ data
+   - Select signal type (e.g., Amplitude)
+   - The tool will process files and create TRS files in the appropriate subdirectory
+3. **Merge TRS files**:
+   - Select mode 3
+   - Set parameter length requirements (e.g., AES-128: Plaintext=16, Key=16, Ciphertext=16)
+   - Choose to generate an average trace if needed
+   - The tool will merge valid files and save the result
+
+## Notes
+
+- Ensure all dependencies are installed before running the tool
+- Parameter files must be properly formatted with hex strings for Plaintext, Key, and Ciphertext
+- IQ files should be complex numpy arrays to ensure correct signal processing
+- The tool performs validation checks to ensure TRS files meet specified parameter length requirements
+
+## Troubleshooting
+
+- **File not found errors**: Verify input file paths and naming conventions
+- **Parameter validation failures**: Check that parameter files contain all required fields with correct hex formatting
+- **TRS file opening errors**: Ensure trs\_loader and csv\_to\_trs modules are correctly installed
+
+
+
 # High-Speed SDR Receiver v1.0
 
 一个基于GNU Radio和HackRF的高性能SDR信号接收与采集系统，支持实时频谱显示、波形分析和自动数据保存。
@@ -1043,3 +1149,107 @@ buffer_size = max(
 - PyQt和pyqtgraph开发社区
 
 **最后更新**：2026年3月
+
+# TRS文件生成与处理工具
+
+## 概述
+
+本工具旨在处理IQ数据文件和参数文件，生成TRS（Trace Set）文件，合并多个TRS文件，并为侧信道分析创建平均轨迹。它支持多种信号类型，并提供用户友好的界面用于选择不同的操作模式。
+
+## 功能特性
+
+- **从IQ数据生成TRS文件**：将原始IQ数据（.npy文件）和参数文件（.txt）转换为TRS文件
+- **信号类型选择**：可选择同相信号（I）、正交信号（Q）或幅度值信号
+- **参数文件处理**：从文本文件中提取参数（明文、密钥、密文）并嵌入到TRS文件中
+- **合并TRS文件**：将多个TRS文件合并为单个文件
+- **平均轨迹生成**：从多个TRS文件创建平均轨迹，以提高信噪比
+
+## 依赖项
+
+- Python 3.x
+- NumPy
+- trsfile
+- tqdm
+- matplotlib
+- csv\_to\_trs（自定义模块）
+- trs\_loader（自定义模块）
+
+## 使用方法
+
+### 运行工具
+
+执行脚本启动交互式界面：
+
+```bash
+python getfinaltrs_zh.py
+```
+
+### 操作模式
+
+1. **从IQ数据和参数文件生成TRS文件**
+   - 选择信号类型（I、Q或幅度值）
+   - 处理.npy IQ文件和.txt参数文件，创建TRS文件
+2. **为现有TRS文件填充参数**
+   - 读取现有的TRS文件并嵌入来自.txt文件的参数
+3. **合并多个TRS文件**
+   - 根据参数长度要求验证TRS文件
+   - 将有效文件合并为单个TRS文件
+   - 可选生成平均轨迹文件
+4. **执行所有操作**
+   - 按顺序运行所有模式
+
+### 输入文件要求
+
+#### 参数文件（.txt）
+
+参数文件应包含以下信息：
+
+```
+session_id = YYYYMMDD_HHMMSS
+save_counter = 000000
+plaintext = <十六进制字符串>
+key = <十六进制字符串>
+ciphertext = <十六进制字符串>
+```
+
+#### IQ文件（.npy）
+
+IQ文件应为存储在.npy格式中的复数numpy数组。预期的命名约定是：
+
+```
+{session_id}_{counter:06d}_iq.npy
+```
+
+### 输出
+
+- **从IQ数据生成的TRS文件**：根据信号类型保存在子目录中（`trs_from_iq_amplitude`、`trs_from_iq_I`、`trs_from_iq_Q`）
+- **带参数的TRS文件**：保存在`with_params`目录中
+- **合并的TRS文件**：保存在`merged`目录中
+- **平均轨迹文件**：保存在`merged`目录中，带有`average_`前缀
+
+## 示例工作流程
+
+1. **准备输入文件**：
+   - 将IQ文件（.npy）和参数文件（.txt）放在同一目录中
+2. **运行工具**：
+   - 选择模式1从IQ数据生成TRS文件
+   - 选择信号类型（例如，幅度值）
+   - 工具将处理文件并在适当的子目录中创建TRS文件
+3. **合并TRS文件**：
+   - 选择模式3
+   - 设置参数长度要求（例如，AES-128：明文=16，密钥=16，密文=16）
+   - 根据需要选择生成平均轨迹
+   - 工具将合并有效文件并保存结果
+
+## 注意事项
+
+- 运行工具前确保安装所有依赖项
+- 参数文件必须正确格式化，包含明文、密钥和密文的十六进制字符串
+- IQ文件应为复数numpy数组，以确保正确的信号处理
+- 工具执行验证检查，确保TRS文件满足指定的参数长度要求
+
+## 故障排除
+
+- **文件未找到错误**：验证输入文件路径和命名约定
+- **参数验证失败**：检查参数文件是否包含所有必需字段，且格式正确
+- **TRS文件打开错误**：确保正确安装了trs\_loader和csv\_to\_trs模块
